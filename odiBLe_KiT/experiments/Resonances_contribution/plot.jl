@@ -8,27 +8,10 @@
 # when calling the code.
 ###########################
 
-using Pkg # For packages management
-
 # Testing if all needed packages are installed 
 # If not install them.
-const allpkg    =  [pkg.name for pkg in values(Pkg.dependencies())]
-const pkglist   = ["ArgParse", "HDF5", "Plots", "LaTeXStrings"]
-const unknownpkg    = Array{String,1}()
-for pkg in pkglist
-    if !(pkg in allpkg)
-        append!(unknownpkg,[pkg])
-    end
-end
-if !(isempty(unknownpkg))
-    println("The following packages are needed to use the plot code :")
-    for pkg in unknownpkg
-        println(pkg)
-    end
-    for pkg in unknownpkg
-        Pkg.add(pkg)
-    end
-end
+include("./../../pkgcheck.jl")
+pkgcheck("ArgParse","HDF5","Plots","LaTeXStrings")
 
 # Charging the needed packages
 using ArgParse

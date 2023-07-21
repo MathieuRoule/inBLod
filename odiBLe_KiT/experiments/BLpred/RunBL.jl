@@ -4,11 +4,17 @@
 # at different ra in a HDF5 file.
 ###########################
 
-try using TimerOutputs catch; println("The TimerOutputs package is needed."); Pkg.add("TimerOutputs"); using TimerOutputs end
-const to = TimerOutput() # Create the timer object
-
 # Include the main computation code
 include("./../../core/Main.jl")
+
+# Packages needed for this experiment
+pkgcheck("TimerOutputs","ProgressMeter")
+
+using ProgressMeter
+using TimerOutputs
+const to = TimerOutput() # Create the timer object
+
+
 # Creation and initialization of the structures needed for computation
 @timeit to "init" include("./../../core/Structscreateinit.jl")
 
@@ -30,6 +36,9 @@ const tab_Flux 	= zeros(Float64,nb_ra)
 
 ######
 function tabdiffcoef!()
+
+    p = Progress(nb_ra,desc="Computations: ")
+
     Threads.@threads for i=1:nb_ra
         k               = Threads.threadid()
         ra              = tab_ra[i]
@@ -42,7 +51,8 @@ function tabdiffcoef!()
         tab_dF0dJ[i]    = dDFdJ(ra)
         (tab_AJ[i], tab_DJJ[i], tab_Flux[i]) = get_AJ_DJJ_Flux(ra,structMultipole[k],structBasis[k],structBL[k])
         tab_DEE[i]      = get_DEE_fromOm_DJJ(tab_Om[i],tab_DJJ[i])
-        println(i)
+        
+        next!(p)
     end
 end
 #####

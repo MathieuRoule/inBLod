@@ -11,6 +11,10 @@ JULIA=julia
 exp="BLpred"                # Diffusion, friction, flux predictions
 # exp="Rescontrib"          # Contribution of different resonances to the diffusion for a given orbit
 
+# Coupling choice (to comment/uncomment)
+# COUPLING="Landau-Multipole"     # Without collective effects
+COUPLING="BL-PdS"             # With collective effects
+
 if test $exp == "BLpred"
 then
     CODE=./RunBL.jl
@@ -24,8 +28,9 @@ else
     exit
 fi
 
-
+#####
 # Arguments for the prediction (some are useless for Landau prediction)
+#####
 NPART=10000
 NMAX=10
 
@@ -33,10 +38,6 @@ STATE="GTE"
 
 MAPPING="polynomial"
 KMF=100
-
-# Coupling choice (to comment/uncomment)
-COUPLING="Landau-Multipole"     # Without collective effects
-# COUPLING="BL-PdS"             # With collective effects
 
 KFT=1000
 
@@ -48,7 +49,7 @@ BLmethod="Legendre"     # Useless for Landau
 NMAXRM=5                # Useless for Landau
 ALEPH="neutral"         # Useless for Landau
 BLramax=10.0            # Useless for Landau
-KBL=50                  # Useless for Landau
+KBL=100                  # Useless for Landau
 
 FILENAME="./../results/${exp}_${STATE}_${COUPLING}"
 

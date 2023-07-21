@@ -5,11 +5,17 @@
 # at a given ra.
 ###########################
 
-try using TimerOutputs catch; println("The TimerOutputs package is needed."); Pkg.add("TimerOutputs"); using TimerOutputs end
-const to = TimerOutput() #Create the timer object
-
 # Include the main computation code
 include("./../../core/Main.jl")
+
+# Packages needed for this experiment
+pkgcheck("TimerOutputs","ProgressMeter")
+
+using ProgressMeter
+using TimerOutputs
+const to = TimerOutput() # Create the timer object
+
+
 # Creation and initialization of the structures needed for computation
 @timeit to "init" include("./../../core/Structscreateinit.jl")
 
@@ -30,6 +36,8 @@ const tab_Flux_contrib  = zeros(Float64,NMAX,NMAX)
 ######
 function rescontrib!()
 
+    p = Progress(NMAX^2,desc="Computations: ")
+
     Threads.@threads for n=1:NMAX
 	k = Threads.threadid() # Thread in charge
         ndotomega = n*val_Omega # Current resonance frequency
@@ -40,8 +48,8 @@ function rescontrib!()
                 (tab_AJ_contrib[n,np], tab_DJJ_contrib[n,np], tab_Flux_contrib[n,np]) = get_resonance_contribution(n,np,ra,rap,ndotomega,structMultipole[k],structBasis[k],structBL[k]) # Contribution from the current resonance
             end
             #####
+            next!(p)
         end
-        println(n)
     end
 end
 #####
