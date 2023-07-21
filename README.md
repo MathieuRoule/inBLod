@@ -7,4 +7,4 @@ It contains 2 directories :
   - odiBLe_Sim, dedicated to N-body simulations of 1D self-gravitating systems (to compare with the predictions made using odiBLe_KiT).
 
 Each directory has its own README file and ready-to-use examples.
-This repository is linked to the following scientific paper : [https://link.aps.org/doi/10.1103/PhysRevE.106.044118](https://link.aps.org/doi/10.1103/PhysRevE.106.044118)
+This repository is linked to the following scientific paper : https://doi.org/10.1103/PhysRevE.106.044118
