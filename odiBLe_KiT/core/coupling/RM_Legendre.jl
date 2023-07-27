@@ -409,14 +409,21 @@ function tabLeg!_DAMPED(omg::Complex{Float64},
 end
 ##################################################
 # Choosing the function tabLeg! depending
-# on the type of linear response considered
+# on the imaginary part of the frequency
 ##################################################
-if (ALEPH == "unstable") # Searching for unstable modes, i.e. Im[w] > 0
-    const tabLeg! = tabLeg!_UNSTABLE # ATTENTION, use `const' to avoid allocations
-elseif (ALEPH == "neutral") # Searching for neutral modes, i.e. Im[w] = 0
-    const tabLeg! = tabLeg!_NEUTRAL # ATTENTION, use `const' to avoid allocations
-elseif (ALEPH == "damped") # Searching for damped modes, i.e. Im[w] < 0
-    const tabLeg! = tabLeg!_DAMPED # ATTENTION, use `const' to avoid allocations
+function tabLeg!(omg::ComplexF64,
+                 struct_tabLeg::structLegendre_type)
+
+    # check the imaginary sign. if negative, use damped integration
+    if (imag(omg) < 0.0)
+        tabLeg!_DAMPED(omg,struct_tabLeg)
+    # if exactly zero, use neutral mode calculation
+    elseif (imag(omg) == 0.0)
+        tabLeg!_NEUTRAL(omg,struct_tabLeg)
+    # by default, use unstable integration
+    else
+        tabLeg!_UNSTABLE(omg,struct_tabLeg)
+    end
 end
 ##################################################
 # Function that pre-computes the Hilbert-transformed

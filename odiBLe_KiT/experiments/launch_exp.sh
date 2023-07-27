@@ -47,14 +47,18 @@ Lperiod=10.0            # Useless for Landau-Multipole
 
 BLmethod="Legendre"     # Useless for Landau
 NMAXRM=5                # Useless for Landau
-ALEPH="neutral"         # Useless for Landau
 BLramax=10.0            # Useless for Landau
 KBL=100                  # Useless for Landau
 
 FILENAME="./../results/${exp}_${STATE}_${COUPLING}"
 
 # Running the computations
-${JULIA} --threads $JULIA_NUM_THREADS ${CODE} --npart $NPART --nmax $NMAX --state $STATE --mapping $MAPPING --K_MF $KMF --coupling $COUPLING --K_FT $KFT --basis $BASIS --nbasiselt $NBASISELT --L_period $Lperiod --BLmethod $BLmethod --nmax_resmat $NMAXRM --aleph $ALEPH --BL_ra_max $BLramax --K_BL $KBL --filename $FILENAME
+${JULIA} --threads $JULIA_NUM_THREADS ${CODE} \
+    --npart $NPART --nmax $NMAX --state $STATE \
+    --mapping $MAPPING --K_MF $KMF --coupling $COUPLING \
+    --K_FT $KFT --basis $BASIS --nbasiselt $NBASISELT --L_period $Lperiod \
+    --BLmethod $BLmethod --nmax_resmat $NMAXRM --BL_ra_max $BLramax --K_BL $KBL \
+    --filename $FILENAME
 wait
 
 # Plotting the results dumped in the HDF5 file

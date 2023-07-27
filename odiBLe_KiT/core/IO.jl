@@ -21,7 +21,6 @@ function att_dump!(namefile::String,option::String="r+")
     write(file,"L_period",L_p)
     #####
     write(file,"BLmethod",BLMETHOD)
-    write(file,"aleph",ALEPH)
     write(file,"nmax_resmat",NMAXRESMAT)
     write(file,"BL_ra_max",BL_RA_MAX)
     write(file,"K_BL",K_BL)

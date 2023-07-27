@@ -31,28 +31,35 @@ end
 # Here, the three different cases correspond
 # respectively to unstable; neutral; damped modes
 ##################################################
-function aleph0_unstable(omg::Complex{Float64})
+function aleph0_UNSTABLE(omg::Complex{Float64})
     return log(1.0-omg) - log(-1.0-omg)
 end
 
-function aleph0_neutral(omg::Complex{Float64})
+function aleph0_NEUTRAL(omg::Complex{Float64})
     romg = real(omg)    
     return log(abs(1.0-romg)) - log(abs(-1.0-romg)) + Heaviside(romg)*pi*im
 end
 
-function aleph0_damped(omg::Complex{Float64})
+function aleph0_DAMPED(omg::Complex{Float64})
     romg = real(omg)    
     return log(1.0-omg) - log(-1.0-omg) + 2.0*Heaviside(romg)*pi*im
 end
-
-if ALEPH == "unstable"
-    const aleph0 = aleph0_unstable
-elseif ALEPH == "damped"
-    const aleph0 = aleph0_damped
-elseif ALEPH == "neutral"
-    const aleph0 = aleph0_neutral
+##################################################
+# Choosing the function aleph0 depending
+# on the imaginary part of the frequency
+##################################################
+function aleph0(omg::ComplexF64)
+    # check the imaginary sign. if negative, use damped integration
+    if (imag(omg) < 0.0)
+        aleph0_DAMPED(omg)
+    # if exactly zero, use neutral mode calculation
+    elseif (imag(omg) == 0.0)
+        aleph0_NEUTRAL(omg)
+    # by default, use unstable integration
+    else
+        aleph0_UNSTABLE(omg)
+    end
 end
-
 
 ###################################################
 # Difficult part of the response matrix computation.

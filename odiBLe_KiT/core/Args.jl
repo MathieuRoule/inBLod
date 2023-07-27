@@ -69,10 +69,6 @@ tabargs = ArgParseSettings()
     help = "If Balescu-Lenard coupling, maximum resonance number for the response matrix calculation"
     arg_type = Int64
     default = 20
-    "--aleph"
-    help = "If Balescu-Lenard coupling, laudau's prescription considered: neutral/damped/unstable"
-    arg_type = String
-    default = "neutral"
     "--BL_ra_max"
     help = "ra_max for integration in response matrix calculation (*Lambda)"
     arg_type = Float64
@@ -109,7 +105,6 @@ const NBASISELMT    = parsed_args["nbasiselt"]      # Number of basis elts to us
 const L_p           = parsed_args["L_period"]       # For SinCos Basis, length of periodization of the potential (to multiply by Lambda)
 ##########
 const BLMETHOD      = parsed_args["BLmethod"]       # Response matrix method considered
-const ALEPH         = parsed_args["aleph"]          # Landau's prescription considered
 const NMAXRESMAT    = parsed_args["nmax_resmat"]    # Maximum resonance number for response matrix
 const BL_RA_MAX     = parsed_args["BL_ra_max"]      # Maximal ra of integration for response matrix (to multiply by Lambda)
 const K_BL          = parsed_args["K_BL"]           # Number of splits in splitting method or interpolation nodes in Legendre method 
@@ -158,11 +153,4 @@ end
 #####
 if ((BLMETHOD != "Splitting") && (BLMETHOD != "Legendre"))
     error("ERROR: UNKNOWN BLMETHOD") # Unknown choice for the Response matrix method
-end
-
-#####
-# Check on the landau's prescription
-#####
-if ((ALEPH != "neutral") && (ALEPH != "unstable") && (ALEPH != "damped") )
-    error("ERROR: UNKNOWN ALEPH") # Unknown choice for the Response matrix method
 end
